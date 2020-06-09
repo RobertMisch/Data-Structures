@@ -1,4 +1,4 @@
-import singly_linked_list
+from singly_linked_list.singly_linked_list import LinkedList
 """
 A queue is a data structure whose primary purpose is to store and
 return elements in First In First Out order. 
@@ -37,7 +37,7 @@ Stretch: What if you could only use instances of your Stack class to implement t
 class Queue:
     def __init__(self):
         self.size = 0
-        self.storage = singly_linked_list.LinkedList()
+        self.storage = LinkedList() #singly_linked_list.LinkedList() is what I had before that made this work
     
     def __len__(self):
         return self.size
