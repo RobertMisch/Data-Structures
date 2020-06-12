@@ -9,6 +9,7 @@ This part of the project comprises two days:
 2. Implement the `in_order_print`, `bft_print`, and `dft_print` methods
    on the BSTNode class.
 """
+import collections #get the deque from python
 class BSTNode:
     def __init__(self, value):
         self.value = value
@@ -76,25 +77,78 @@ class BSTNode:
             self.left.for_each(fn)
         if self.right:
             self.right.for_each(fn)
+        #this is actually a left to right depth first traversal if we move the fn(self.value)
 
+    def iner_depth_first_for_each(self, fn):
+        #with depth first there's a certain order to when we visit nodes
+        #turns out that what we just did is last in first out ordering, recursion does so naturally
+        stack=[]
+        #put root node in the stack
+        stack.append(self)
+        #contine traversing until stack is empty
+        while len(stack)>0:
+            #pop off the stack
+            current_node=stack.pop()
+            #add it's children to the stack
+            #add right first so that it's done last
+            if current_node.right:
+                stack.append(current_node.right)
+            #left last to make sure it's popped first
+            if current_node.left:
+                stack.append(current_node.left)
+            #call the fn function on self.value
+            fn(self.value)
 
+    def iter_breadth_first(self, fn):
+        q= collections.deque()
+
+        q.append(self)
+        while len(q)>0:
+            current_node = q.popleft()
+            if current_node.left:
+                q.append(current_node.left)
+            if current_node.right:
+                q.append(current_node.right)
+            fn(self.value)
 
     # Part 2 -----------------------
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
-    def in_order_print(self, node):
-        pass
+    def in_order_print(self, node=None):
+        if self.left:
+            self.left.in_order_print()
+        #the reason the print goes here is that it checks through the lowest deeply first. 
+        #but then goes from the shallowest number to the biggest. thus why it has to be over right
+        print(self.value)
+        if self.right:
+            self.right.in_order_print()
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self, node):
-        pass
+        q= collections.deque()
+        q.append(node)
+        while len(q)>0:
+            current_node = q.popleft()
+            if current_node.left:
+                q.append(current_node.left)
+            if current_node.right:
+                q.append(current_node.right)
+            print(current_node.value)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self, node):
-        pass
+        stack=[]
+        stack.append(node)
+        while len(stack)>0:
+            current_node=stack.pop()
+            if current_node.right:
+                stack.append(current_node.right)
+            if current_node.left:
+                stack.append(current_node.left)
+            print(current_node.value)
 
     # Stretch Goals -------------------------
     # Note: Research may be required
